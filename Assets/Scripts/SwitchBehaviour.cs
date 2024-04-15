@@ -17,8 +17,8 @@ public class SwitchBehaviour : MonoBehaviour
     float switchDelay = 0.2f;
     bool isPressingSwitch = false;
 
-    bool isDoorLocked = true; // Set door locked status
-  
+    [SerializeField] InventoryManager.AllItems requiredItem;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -62,9 +62,9 @@ public class SwitchBehaviour : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            isPressingSwitch = !isPressingSwitch;
-            if (!isDoorLocked)
+            if (HasRequiredItem(requiredItem))
             {
+                isPressingSwitch = !isPressingSwitch;
                 if (isDoorOpenSwitch && !doorBehaviour.isDoorOpen)
                 {
                     doorBehaviour.isDoorOpen = !doorBehaviour.isDoorOpen;
@@ -91,8 +91,16 @@ public class SwitchBehaviour : MonoBehaviour
         isPressingSwitch = false;
     }
 
-    public void DoorLockedStatus() 
+    public bool HasRequiredItem(InventoryManager.AllItems itemRequired)
     {
-        isDoorLocked = !isDoorLocked;
+        if (InventoryManager.instance.inventoryItems.Contains(itemRequired))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
+
 }
