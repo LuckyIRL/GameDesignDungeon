@@ -16,6 +16,8 @@ public class SwitchBehaviour : MonoBehaviour
     float switchSpeed = 2.0f;
     float switchDelay = 0.2f;
     bool isPressingSwitch = false;
+
+    bool isDoorLocked = true; // Set door locked status
   
     // Start is called before the first frame update
     void Awake()
@@ -61,15 +63,17 @@ public class SwitchBehaviour : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPressingSwitch = !isPressingSwitch;
-            if (isDoorOpenSwitch && !doorBehaviour.isDoorOpen)
+            if (!isDoorLocked)
             {
-                doorBehaviour.isDoorOpen = !doorBehaviour.isDoorOpen;
+                if (isDoorOpenSwitch && !doorBehaviour.isDoorOpen)
+                {
+                    doorBehaviour.isDoorOpen = !doorBehaviour.isDoorOpen;
+                }
+                else if (isDoorClosedSwitch && doorBehaviour.isDoorOpen)
+                {
+                    doorBehaviour.isDoorOpen = !doorBehaviour.isDoorOpen;
+                }
             }
-            else if (isDoorClosedSwitch && doorBehaviour.isDoorOpen)
-            {
-                doorBehaviour.isDoorOpen = !doorBehaviour.isDoorOpen;
-            }
-
         }
     }
 
@@ -85,5 +89,10 @@ public class SwitchBehaviour : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         isPressingSwitch = false;
+    }
+
+    public void DoorLockedStatus() 
+    {
+        isDoorLocked = !isDoorLocked;
     }
 }
