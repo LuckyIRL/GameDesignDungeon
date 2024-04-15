@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private Vector3 _direction;
 
-    [SerializeField] private float _speed = 5.0f;
+    //[SerializeField] private float _speed = 5.0f;
     [SerializeField] private Movement _movement;
     [SerializeField] private float rotationSpeed = 500f;
     private Camera _mainCamera;
