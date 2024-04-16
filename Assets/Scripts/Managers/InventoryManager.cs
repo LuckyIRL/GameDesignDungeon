@@ -10,7 +10,7 @@ public class InventoryManager : MonoBehaviour
 
     public List<AllItems> inventoryItems = new List<AllItems>(); // Our items in the inventory
 
-    private int numberOfKeys = 0;
+    //private int numberOfKeys = 0;
     public TextMeshPro keyText;
     public int numberOfArrows = 0;
 

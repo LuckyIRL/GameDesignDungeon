@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -17,8 +18,13 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] private float _speed = 5.0f;
     [SerializeField] private Movement _movement;
     [SerializeField] private float rotationSpeed = 500f;
-    private Camera _mainCamera;
-    private Camera _aimCamera;
+
+    // Camera variables
+    private CinemachineVirtualCamera _mainCamera;
+    private CinemachineVirtualCamera _aimCamera;
+    [SerializeField] SwitchCam _switchCam;
+
+
     // Gravity variables
     private float _gravity = -9.81f;
     [SerializeField] private float _gravityMultiplier = 3.0f;
@@ -31,13 +37,17 @@ public class PlayerController : MonoBehaviour
     private bool _isArrowReady = true;
     [SerializeField] private GameObject _arrowPrefab;
     [SerializeField] private Transform _arrowSpawnPoint;
-    [SerializeField] private float _arrowSpeed = 10.0f;
     [SerializeField] private float _arrowCooldown = 1.0f;
+    [SerializeField] private Transform arrowParent;
+    [SerializeField] private float arrowHitMissDistance = 25;
+    private Transform cameraTransform;
+    private ArrowBehaviour arrowBehaviour;
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
-        _mainCamera = Camera.main;
+        _switchCam = GetComponent<SwitchCam>();
+        _mainCamera = GameObject.Find("MainCamera").GetComponent<CinemachineVirtualCamera>();
     }
 
     private void Update()
@@ -101,22 +111,50 @@ public class PlayerController : MonoBehaviour
 
     public void Aim(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-
-        _mainCamera.enabled = !_mainCamera.enabled;
-        _aimCamera.enabled = _aimCamera.enabled;
+        if (context.started)
+        {
+            _switchCam.StartAim();
+        }
+        else if (context.canceled)
+        {
+            _switchCam.CancelAim();
+        }
     }
 
+    // Shoot Method to spawn the arrow to shoot at the center of the screen where the player is aiming using Raycasttohit
 
     public void Shoot(InputAction.CallbackContext context)
     {
         if (!context.started || !_isArrowReady) return;
 
-        var arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, _arrowSpawnPoint.rotation);
-        arrow.GetComponent<Rigidbody>().velocity = _arrowSpawnPoint.forward * _arrowSpeed;
-        _isArrowReady = false;
-        StartCoroutine(ResetArrow());
+        if (_movement.isSprinting)
+        {
+            _switchCam.CancelAim();
+        }
+
+        if (_isArrowReady)
+        {
+            _isArrowReady = false;
+            StartCoroutine(ResetArrow());
+            var arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity, arrowParent);
+            arrowBehaviour = arrow.GetComponent<ArrowBehaviour>();
+            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
+            {
+                arrowBehaviour.target = hit.point;
+            }
+            else
+            {
+                arrowBehaviour.target = ray.GetPoint(arrowHitMissDistance);
+            }
+        }
     }
+
+
+
+
+
 
     private IEnumerator ResetArrow()
     {

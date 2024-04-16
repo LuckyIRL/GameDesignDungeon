@@ -1,27 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ArrowBehaviour : MonoBehaviour
 {
-    public float speed = 10f;
-    public float lifeTime = 2f;
-    public int damage = 1;
-    public int time = 0;
-    public float force = 10f;
+    // Variables and Methods to add force to the arrow's direction and speed and target
+    public float _speed = 10.0f;
+    private Vector3 forwardDirection;
+    public Vector3 target { get; set; }
+    public bool hit { get; set; }
 
-    // Move the arrow forward and rotate it
-    void Update()
+    private void Awake()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        forwardDirection = transform.forward;
     }
 
-    // Destroy the arrow after a certain amount of time
-    void Start()
+    private void Update()
     {
-        Destroy(gameObject, lifeTime);
+        if (hit)
+        {
+            return;
+        }
+        transform.position += forwardDirection * _speed * Time.deltaTime;
+        if (Vector3.Distance(transform.position, target) < 0.5f)
+        {
+            hit = true;
+        }
     }
 
-    // Deal damage to the enemy
 
 }
