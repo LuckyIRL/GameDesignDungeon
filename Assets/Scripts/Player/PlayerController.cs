@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Movement _movement;
     [SerializeField] private float rotationSpeed = 500f;
     private Camera _mainCamera;
+    private Camera _aimCamera;
     // Gravity variables
     private float _gravity = -9.81f;
     [SerializeField] private float _gravityMultiplier = 3.0f;
@@ -96,6 +97,14 @@ public class PlayerController : MonoBehaviour
     public void Sprint(InputAction.CallbackContext context)
     {
         _movement.isSprinting = context.started || context.performed;
+    }
+
+    public void Aim(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+
+        _mainCamera.enabled = !_mainCamera.enabled;
+        _aimCamera.enabled = _aimCamera.enabled;
     }
 
 
