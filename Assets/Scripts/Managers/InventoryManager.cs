@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
 
     private int numberOfKeys = 0;
     public TextMeshPro keyText;
+    public int numberOfArrows = 0;
 
     private void Awake()
     {
@@ -39,5 +40,6 @@ public class InventoryManager : MonoBehaviour
         KeyRed,
         KeyYellow,
         KeyGreen,
+        Arrows,
     }
 }

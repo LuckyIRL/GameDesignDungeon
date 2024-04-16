@@ -12,16 +12,26 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private Vector3 _direction;
 
+
+    // Movement variables
     //[SerializeField] private float _speed = 5.0f;
     [SerializeField] private Movement _movement;
     [SerializeField] private float rotationSpeed = 500f;
     private Camera _mainCamera;
+    // Gravity variables
     private float _gravity = -9.81f;
     [SerializeField] private float _gravityMultiplier = 3.0f;
     private float _velocity;
+    // Jump variables
     [SerializeField] private float _jumpPower = 3.0f;
     private int _numberOfJumps;
     [SerializeField] private int _maxNumberOfJumps = 2;
+    // Arrow variables
+    private bool _isArrowReady = true;
+    [SerializeField] private GameObject _arrowPrefab;
+    [SerializeField] private Transform _arrowSpawnPoint;
+    [SerializeField] private float _arrowSpeed = 10.0f;
+    [SerializeField] private float _arrowCooldown = 1.0f;
 
     private void Awake()
     {
@@ -86,6 +96,23 @@ public class PlayerController : MonoBehaviour
     public void Sprint(InputAction.CallbackContext context)
     {
         _movement.isSprinting = context.started || context.performed;
+    }
+
+
+    public void Shoot(InputAction.CallbackContext context)
+    {
+        if (!context.started || !_isArrowReady) return;
+
+        var arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, _arrowSpawnPoint.rotation);
+        arrow.GetComponent<Rigidbody>().velocity = _arrowSpawnPoint.forward * _arrowSpeed;
+        _isArrowReady = false;
+        StartCoroutine(ResetArrow());
+    }
+
+    private IEnumerator ResetArrow()
+    {
+        yield return new WaitForSeconds(_arrowCooldown);
+        _isArrowReady = true;
     }
 
 
