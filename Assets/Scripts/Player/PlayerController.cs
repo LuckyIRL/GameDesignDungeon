@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     // Camera variables
     private CinemachineVirtualCamera _mainCamera;
-    private CinemachineVirtualCamera _aimCamera;
     [SerializeField] SwitchCam _switchCam;
 
 
@@ -42,7 +41,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float arrowHitMissDistance = 25;
     private Transform cameraTransform;
     private ArrowBehaviour arrowBehaviour;
-
+    public bool hasBow = false;
+    [SerializeField] private Transform _bowParent;
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -121,37 +121,83 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Shoot Method to spawn the arrow to shoot at the center of the screen where the player is aiming using Raycasttohit
+
+    // When called, checks if the player has a Bow and Arrows. Player can not shoot with < 1 arrow.
+    // If both conditions are met, instantiates an Arrow prefab and fires it where the player is aiming using a Raycastfrom the camera view
+    // This will work in both camera views, main camera and aim camera.
+    // using a Raycast from the player's camera and show it with a line renderer.
+    // If the Raycast hits something, the arrow aims at the hit point.
+    // If the Raycast doesn't hit anything, the arrow aims at a point along the ray at a maximum distance.
+    // This method is triggered by player input and is used to shoot arrows from the player's bow.
+    // The method also updates the UI to reflect the number of arrows the player has left.
 
     public void Shoot(InputAction.CallbackContext context)
     {
-        if (!context.started || !_isArrowReady) return;
+        Debug.Log("Shoot method called."); // Add this line for debugging
 
-        if (_movement.isSprinting)
+        // When called, checks if the player has a Bow and Arrows. Player can not shoot with < 1 arrow.
+        if (!context.started || !_isArrowReady || !hasBow || InventoryManager.instance.numberOfArrows < 1)
         {
-            _switchCam.CancelAim();
+            Debug.Log("Cannot shoot: Conditions not met."); // Add this line for debugging
+            return;
         }
 
-        if (_isArrowReady)
+        // Set the arrow as not ready to prevent rapid shooting
+        _isArrowReady = false;
+        StartCoroutine(ResetArrow());
+
+        // Get the transform of the player's current camera
+        Transform cameraTransform = _switchCam.CurrentCamera.transform;
+
+        // Perform a raycast from the center of the screen of the current camera
+        Ray ray = cameraTransform.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+        // Instantiate the arrow prefab for shooting
+        var arrowObject = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity, arrowParent);
+        arrowBehaviour = arrowObject.GetComponent<ArrowBehaviour>();
+
+        // Create a line renderer to visualize the arrow's trajectory
+        LineRenderer lineRenderer = arrowObject.AddComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+
+        // Perform a raycast to determine the arrow's target point
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
         {
-            _isArrowReady = false;
-            StartCoroutine(ResetArrow());
-            var arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, Quaternion.identity, arrowParent);
-            arrowBehaviour = arrow.GetComponent<ArrowBehaviour>();
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
-            {
-                arrowBehaviour.target = hit.point;
-            }
-            else
-            {
-                arrowBehaviour.target = ray.GetPoint(arrowHitMissDistance);
-            }
+            // If the ray hits something, set the arrow's target to the hit point
+            arrowBehaviour.Target = hit.point;
+            lineRenderer.SetPosition(0, _arrowSpawnPoint.position);
+            lineRenderer.SetPosition(1, hit.point);
+            Debug.Log("Raycast hit at: " + hit.point);
         }
+        else
+        {
+            // If the ray doesn't hit anything, set the arrow's target to a point along the ray at a maximum distance
+            Vector3 targetPoint = ray.origin + ray.direction * arrowHitMissDistance;
+            arrowBehaviour.Target = targetPoint;
+            lineRenderer.SetPosition(0, _arrowSpawnPoint.position);
+            lineRenderer.SetPosition(1, targetPoint);
+            Debug.Log("Raycast did not hit anything. Shooting at maximum distance.");
+        }
+
+        // Update the UI
+        InventoryManager.instance.numberOfArrows--; // Decrement the number of arrows
+        InventoryManager.instance.UpdateUI();
     }
 
 
+
+    // Activate PlayerBow Prefab on the player
+
+    public void ActivateBow()
+    {
+        hasBow = true;
+        _bowParent.gameObject.SetActive(true);
+    }
 
 
 

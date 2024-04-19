@@ -11,7 +11,8 @@ public class InventoryManager : MonoBehaviour
     public List<AllItems> inventoryItems = new List<AllItems>(); // Our items in the inventory
 
     //private int numberOfKeys = 0;
-    public TextMeshPro keyText;
+    [SerializeField] public TextMeshProUGUI keyText;
+    [SerializeField] public TextMeshProUGUI arrowText;
     public int numberOfArrows = 0;
 
     private void Awake()
@@ -34,6 +35,30 @@ public class InventoryManager : MonoBehaviour
             inventoryItems.Remove(item);
         }
     }
+
+    // method to update the key text and the number of arrows text
+    public void UpdateUI()
+    {
+        int keyCount = CountKeys();
+        keyText.text = "Keys: " + keyCount.ToString();
+        arrowText.text = "Arrows: " + numberOfArrows.ToString();
+    }
+
+    private int CountKeys()
+    {
+        int count = 0;
+        foreach (var item in inventoryItems)
+        {
+            if (item == AllItems.KeyRed || item == AllItems.KeyYellow || item == AllItems.KeyGreen)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+
 
     public enum AllItems // All available items in the game
     {

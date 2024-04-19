@@ -10,7 +10,10 @@ public class KeyBehaviour : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            // Add the key to the inventory and update the UI
             InventoryManager.instance.AddItem(itemType);
+            InventoryManager.instance.UpdateUI();
+            // Destroy the key
             Destroy(gameObject);
         }
     }
