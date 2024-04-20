@@ -12,6 +12,7 @@ public class ArrowBehaviour : MonoBehaviour
     private float _elapsedTime; // Elapsed time since the arrow was instantiated
     private bool _isDestroyed; // Flag to determine if the arrow has been destroyed
 
+
     // Public property for the target
     public Vector3 Target { get; set; }
 

@@ -140,79 +140,22 @@ public class PlayerController : MonoBehaviour
         _bowParent.gameObject.SetActive(true);
     }
 
-    public void DrawBow(InputAction.CallbackContext context)
+    private void OnCollisionEnter(Collision collision)
     {
-        // Ensure the player has a bow
-        if (!hasBow) return;
-
-        // Get the input value from the trigger
-        float inputValue = context.ReadValue<float>();
-
-        // Calculate draw strength based on trigger value
-        float drawStrength = Mathf.Clamp01(inputValue);
-
-        // Update the draw strength slider
-        if (drawStrengthSlider != null)
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            drawStrengthSlider.value = drawStrength;
-        }
-
-        // If the trigger is released, shoot the arrow
-        if (context.canceled)
-        {
-            // Access IsAiming using the class name
-            if (SwitchCam.IsAiming)
+            // Check if the player is above the enemy
+            if (IsAbove(collision.gameObject))
             {
-                ShootArrow(context);
-                Debug.Log("DrawBow canceled. Arrow shot.");
+                // Damage the enemy when jumping on it
+                collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(jumpDamage);
             }
         }
     }
 
+    // Update the ShootArrow method to accept an InputAction.CallbackContext parameter, this will shoot the arrow when the button is let go, it will have the drawstrength value
 
-
-    // Method to use the bow's draw strength with the mouse scroll wheel
-    public void DrawBowScroll(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            _drawStrength = 0.0f;
-            Debug.Log("DrawBowScroll started");
-        }
-        else if (context.performed)
-        {
-            _drawStrength += context.ReadValue<Vector2>().y * Time.deltaTime;
-            _drawStrength = Mathf.Clamp(_drawStrength, 0.0f, 1.0f);
-            Debug.Log("DrawBowScroll performed. Draw strength: " + _drawStrength);
-            // Update Slider value
-            if (drawStrengthSlider != null)
-            {
-                drawStrengthSlider.value = _drawStrength;
-            }
-        }
-        else if (context.canceled)
-        {
-            // Access IsAiming using the class name
-            if (SwitchCam.IsAiming)
-            {
-                ShootArrow(context); // Pass the context
-            }
-        }
-    }
-
-
-    // Method to ShootArrow with the current draw strength
-    // When called, checks if the player has a Bow and Arrows. Player can not shoot with < 1 arrow.
-    // If both conditions are met, instantiates an Arrow prefab and fires it where the player is aiming using a Raycastfrom the camera view
-    // This will work in both camera views, main camera and aim camera.
-    // using a Raycast from the player's camera and show it with a line renderer.
-    // If the Raycast hits something, the arrow aims at the hit point.
-    // If the Raycast doesn't hit anything, the arrow aims at a point along the ray at a maximum distance.
-    // This method is triggered by player input and is used to shoot arrows from the player's bow.
-    // The method also updates the UI to reflect the number of arrows the player has left.
-
-    // Update the ShootArrow method to accept an InputAction.CallbackContext parameter
-    public void ShootArrow(InputAction.CallbackContext context)
+    public void ShootArrow()
     {
         // Ensure the player has a bow and the arrow is ready
         if (!hasBow || !_isArrowReady) return;
@@ -224,15 +167,12 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Get the draw strength from the context
-        float drawStrength = Mathf.Clamp01(context.ReadValue<float>());
-
         // Instantiate arrow
         GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, _arrowSpawnPoint.rotation, arrowParent);
         arrowBehaviour = arrow.GetComponent<ArrowBehaviour>();
 
         // Pass draw strength to the arrow behaviour
-        arrowBehaviour.SetDrawStrength(drawStrength);
+        arrowBehaviour.SetDrawStrength(_drawStrength);
 
         // Get the camera transform based on aiming status
         cameraTransform = SwitchCam.IsAiming ? _switchCam._aimCamera.transform : _mainCamera.transform;
@@ -249,6 +189,16 @@ public class PlayerController : MonoBehaviour
             arrowBehaviour.Target = ray.GetPoint(arrowHitMissDistance);
         }
 
+        // When the arrow hits the enemy, damage it
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
+        {
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                hit.collider.GetComponent<EnemyHealth>().TakeDamage(arrowDamage);
+            }
+        }
+
         // Update the number of arrows
         InventoryManager.instance.numberOfArrows--;
         InventoryManager.instance.UpdateUI();
@@ -257,6 +207,8 @@ public class PlayerController : MonoBehaviour
         _isArrowReady = false;
         StartCoroutine(ResetArrow());
     }
+
+
 
     private IEnumerator ResetArrow()
     {
