@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shoot",
+                    "name": "ShootArrow",
                     "type": "Button",
                     "id": "4b0bf65a-6921-41f9-ad8a-d4a31a3ad410",
                     "expectedControlType": "Button",
@@ -76,6 +76,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DrawBow",
+                    "type": "Value",
+                    "id": "55f4d476-db65-4c76-9c5a-18fbec9997ee",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DrawBowScroll",
+                    "type": "Value",
+                    "id": "5fb4f32f-8db3-49e3-8086-39492d6120a7",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -306,7 +324,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "ShootArrow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -317,7 +335,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "ShootArrow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -368,7 +386,7 @@
                 {
                     "name": "",
                     "id": "220acc3b-be75-4ced-9384-948418cc7edf",
-                    "path": "<Gamepad>/leftTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -379,11 +397,33 @@
                 {
                     "name": "",
                     "id": "72ade30d-4b08-4c75-9a78-1054699869e5",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e2a37ee1-157b-455a-820e-b21a9a021ba3",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DrawBow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26f61422-8c05-4735-8226-0bd4741a63ba",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DrawBowScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
