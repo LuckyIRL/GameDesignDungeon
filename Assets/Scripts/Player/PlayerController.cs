@@ -140,18 +140,6 @@ public class PlayerController : MonoBehaviour
         _bowParent.gameObject.SetActive(true);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            // Check if the player is above the enemy
-            if (IsAbove(collision.gameObject))
-            {
-                // Damage the enemy when jumping on it
-                collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(jumpDamage);
-            }
-        }
-    }
 
     // Update the ShootArrow method to accept an InputAction.CallbackContext parameter, this will shoot the arrow when the button is let go, it will have the drawstrength value
 
@@ -189,15 +177,6 @@ public class PlayerController : MonoBehaviour
             arrowBehaviour.Target = ray.GetPoint(arrowHitMissDistance);
         }
 
-        // When the arrow hits the enemy, damage it
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
-        {
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                hit.collider.GetComponent<EnemyHealth>().TakeDamage(arrowDamage);
-            }
-        }
 
         // Update the number of arrows
         InventoryManager.instance.numberOfArrows--;
