@@ -1,4 +1,4 @@
-﻿ using UnityEngine;
+﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -109,6 +109,8 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        public GameObject arrowObject;
+        public Transform arrowPoint;
 
         private bool IsCurrentDeviceMouse
         {
@@ -135,7 +137,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -162,17 +164,31 @@ namespace StarterAssets
             AimShoot();
         }
 
-        private void AimShoot() 
+        private void AimShoot()
         {
-            if (_input.isAiming && Grounded && !_input.sprint) 
+            if (_input.isAiming && Grounded && !_input.sprint)
             {
                 //Play aiming animation
+                _animator.SetBool("Aiming", _input.isAiming);
+                _animator.SetBool("Shooting", _input.isShooting);
+
             }
             else
             {
                 //Stop the animation
+                _animator.SetBool("Aiming", false);
+                _animator.SetBool("Shooting", false);
             }
         }
+
+        public void Shoot()
+        {
+            GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
+            arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25, ForceMode.Impulse);
+            Debug.Log("Throw Arrow");
+        }
+
+
 
         private void LateUpdate()
         {

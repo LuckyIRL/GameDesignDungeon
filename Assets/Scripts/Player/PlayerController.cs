@@ -155,27 +155,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Instantiate arrow
-        GameObject arrow = Instantiate(_arrowPrefab, _arrowSpawnPoint.position, _arrowSpawnPoint.rotation, arrowParent);
-        arrowBehaviour = arrow.GetComponent<ArrowBehaviour>();
-
-        // Pass draw strength to the arrow behaviour
-        arrowBehaviour.SetDrawStrength(_drawStrength);
-
-        // Get the camera transform based on aiming status
-        cameraTransform = SwitchCam.IsAiming ? _switchCam._aimCamera.transform : _mainCamera.transform;
-
-        // Raycast from the camera
-        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, arrowHitMissDistance))
-        {
-            arrowBehaviour.Target = hit.point;
-        }
-        else
-        {
-            arrowBehaviour.Target = ray.GetPoint(arrowHitMissDistance);
-        }
 
 
         // Update the number of arrows

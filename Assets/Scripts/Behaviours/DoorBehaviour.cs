@@ -23,12 +23,12 @@ public class DoorBehaviour : MonoBehaviour
         if (isDoorOpen)
         {
             OpenDoor();
-            Debug.Log("Door is open");
+            //Debug.Log("Door is open");
         }
         else if (!isDoorOpen)
         {
             CloseDoor();
-            Debug.Log("Door is closed");
+            //Debug.Log("Door is closed");
         }
 
     }
@@ -38,7 +38,7 @@ public class DoorBehaviour : MonoBehaviour
         if (transform.position !=  doorOpenPos)
         {
             transform.position = Vector3.MoveTowards(transform.position, doorOpenPos, doorSpeed * Time.deltaTime);
-            Debug.Log("Door is opening");
+            //Debug.Log("Door is opening");
         }
     }
 
@@ -47,7 +47,7 @@ public class DoorBehaviour : MonoBehaviour
         if (transform.position != doorClosedPos)
         {
             transform.position = Vector3.MoveTowards(transform.position, doorClosedPos, doorSpeed * Time.deltaTime);
-            Debug.Log("Door is closing");
+            //Debug.Log("Door is closing");
         }
     }
 }
