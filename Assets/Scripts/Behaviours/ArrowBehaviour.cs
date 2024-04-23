@@ -2,9 +2,15 @@ using UnityEngine;
 
 public class ArrowBehaviour : MonoBehaviour
 {
+    [SerializeField] private float arrowSpeed = 50f;
+    [SerializeField] private float timeToDestroy = 5f;
+
+    public Vector3 target { get; set; }
+    public bool hit { get; set; }
+    
     private void Start()
     {
-        Destroy(gameObject, 10);
+        
     }
 
     private void OnTriggerEnter(Collider other)

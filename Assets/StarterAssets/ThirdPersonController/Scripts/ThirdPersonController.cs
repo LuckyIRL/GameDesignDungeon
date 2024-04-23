@@ -109,7 +109,9 @@ namespace StarterAssets
         private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _input;
+        private InputAction shootAction;
         private GameObject _mainCamera;
+        private Transform cameraTransform;
         private bool _rotateOnMove = true;
 
         private const float _threshold = 0.01f;
@@ -120,6 +122,7 @@ namespace StarterAssets
         // Bow and Arrow
         public bool hasBow = false;
         [SerializeField] private Transform _bowParent;
+        [SerializeField] private Transform _arrowParent;
         public GameObject arrowObject;
         public Transform arrowPoint;
         public bool hasArrows = false;
@@ -132,6 +135,7 @@ namespace StarterAssets
         public CinemachineVirtualCamera followCamera;
         public UIController uiController;
         private InventoryManager inventoryManager;
+
 
 
         [Header("AIM")]
@@ -159,7 +163,23 @@ namespace StarterAssets
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+                _hasAnimator = TryGetComponent(out _animator);
+                _controller = GetComponent<CharacterController>();
+                _input = GetComponent<StarterAssetsInputs>();
+                shootAction = _playerInput.actions["Shoot"];
+                
+                
             }
+        }
+
+        private void OnEnable()
+        {
+            shootAction.performed += _ => Shoot();
+        }
+
+        private void OnDisable()
+        {
+            shootAction.performed -= _ => Shoot();
         }
 
         private void Start()
@@ -168,9 +188,7 @@ namespace StarterAssets
 
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            _hasAnimator = TryGetComponent(out _animator);
-            _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
+
 #if ENABLE_INPUT_SYSTEM 
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -187,29 +205,12 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            Vector3 mouseWorldPosition = Vector3.zero;
 
-            Vector2 screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
-            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
-            {
-                debugTransform.position = raycastHit.point;
-                mouseWorldPosition = raycastHit.point;
-            }
+            JumpAndGravity();
+            GroundedCheck();
+            Move();
+            AimShoot();
 
-            if (true)
-            {
-                JumpAndGravity();
-                GroundedCheck();
-                Move();
-                AimShoot();
-
-                Vector3 worldAimTarget = mouseWorldPosition;
-                worldAimTarget.y = transform.position.y;
-                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
-
-                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 50f);
-            }
 
         }
 
@@ -432,8 +433,12 @@ namespace StarterAssets
 
         public void Shoot()
         {
-            GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
-            arrow.GetComponent<Rigidbody>().velocity = arrow.transform.forward * 30;
+            RaycastHit hit;
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Mathf.Infinity, aimColliderLayerMask))
+            {
+                GameObject arrow = GameObject.Instantiate(arrowObject, arrowPoint.position, Quaternion.identity, _arrowParent);
+            }
+
         }
 
 
