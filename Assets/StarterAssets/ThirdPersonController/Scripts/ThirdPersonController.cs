@@ -30,6 +30,9 @@ namespace StarterAssets
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
 
+        [Tooltip("Aim Sensitivity")]
+        public float Sensitivity = 3.0f;
+
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
@@ -107,11 +110,13 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private bool _rotateOnMove = true;
 
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
 
+        [Header("Bow and Arrow")]
         // Bow and Arrow
         public bool hasBow = false;
         [SerializeField] private Transform _bowParent;
@@ -121,11 +126,20 @@ namespace StarterAssets
         public bool canShoot = true;
         public float _arrowCooldown = 1.0f;
 
+        [Header("Camera UI")]
         //Aim Camera switch
         public CinemachineVirtualCamera aimCamera;
         public CinemachineVirtualCamera followCamera;
         public UIController uiController;
         private InventoryManager inventoryManager;
+
+
+        [Header("AIM")]
+        [Tooltip("Change the sensitivity of the aiming")]
+        [SerializeField] private float normalSensitivity;
+        [SerializeField] private float aimingSensitivity;
+        [SerializeField] private LayerMask aimColliderLayerMask = new LayerMask();
+        [SerializeField] private Transform debugTransform;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -173,54 +187,31 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
+            Vector3 mouseWorldPosition = Vector3.zero;
 
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
-            AimShoot();
-        }
-
-        
-
-
-
-        private void AimShoot()
-        {
-            if (_input.isAiming && Grounded && !_input.sprint)
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2, Screen.height / 2);
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, aimColliderLayerMask))
             {
-                //Play aiming animation
-                _animator.SetBool("Aiming", _input.isAiming);
-                _animator.SetBool("Shooting", _input.isShooting);
-                aimCamera.gameObject.SetActive(true);
-                followCamera.gameObject.SetActive(false);
-                uiController.SwitchUI(true);
-
+                debugTransform.position = raycastHit.point;
+                mouseWorldPosition = raycastHit.point;
             }
-            else
+
+            if (true)
             {
-                //Stop the animation
-                _animator.SetBool("Aiming", false);
-                _animator.SetBool("Shooting", false);
-                aimCamera.gameObject.SetActive(false);
-                followCamera.gameObject.SetActive(true);
-                uiController.SwitchUI(false);
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
+                AimShoot();
+
+                Vector3 worldAimTarget = mouseWorldPosition;
+                worldAimTarget.y = transform.position.y;
+                Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+                transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 50f);
             }
+
         }
-
-        public void Shoot()
-        {
-            GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
-            arrow.GetComponent<Rigidbody>().velocity = arrow.transform.forward * 30;
-        }
-
-
-        public void ActivateBow()
-        {
-            hasBow = true;
-            _bowParent.gameObject.SetActive(true);
-        }
-
-
 
         private void LateUpdate()
         {
@@ -259,8 +250,8 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier * Sensitivity;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * Sensitivity;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -321,8 +312,10 @@ namespace StarterAssets
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                if (_rotateOnMove)
+                {
+                    transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
             }
 
 
@@ -409,6 +402,47 @@ namespace StarterAssets
             }
         }
 
+        private void AimShoot()
+        {
+            if (_input.isAiming && Grounded && !_input.sprint)
+            {
+                //Play aiming animation
+                _animator.SetBool("Aiming", _input.isAiming);
+                _animator.SetBool("Shooting", _input.isShooting);
+                aimCamera.gameObject.SetActive(true);
+                followCamera.gameObject.SetActive(false);
+                uiController.SwitchUI(true);
+                Sensitivity = aimingSensitivity;
+                SetRotateOnMove(false);
+
+
+            }
+            else
+            {
+                //Stop the animation
+                _animator.SetBool("Aiming", false);
+                _animator.SetBool("Shooting", false);
+                aimCamera.gameObject.SetActive(false);
+                followCamera.gameObject.SetActive(true);
+                uiController.SwitchUI(false);
+                Sensitivity = normalSensitivity;
+                SetRotateOnMove(true);
+            }
+        }
+
+        public void Shoot()
+        {
+            GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
+            arrow.GetComponent<Rigidbody>().velocity = arrow.transform.forward * 30;
+        }
+
+
+        public void ActivateBow()
+        {
+            hasBow = true;
+            _bowParent.gameObject.SetActive(true);
+        }
+
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;
@@ -428,6 +462,16 @@ namespace StarterAssets
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
+        }
+
+        public void SetSensitivity(float newSensitivity) 
+        {
+            Sensitivity = newSensitivity;
+        }
+
+        public void SetRotateOnMove(bool newRotateOnMove) 
+        {
+            _rotateOnMove = newRotateOnMove;
         }
 
         private void OnFootstep(AnimationEvent animationEvent)
