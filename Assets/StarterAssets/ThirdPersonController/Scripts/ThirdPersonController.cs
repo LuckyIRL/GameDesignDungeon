@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using System.Collections;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -115,7 +117,15 @@ namespace StarterAssets
         [SerializeField] private Transform _bowParent;
         public GameObject arrowObject;
         public Transform arrowPoint;
+        public bool hasArrows = false;
+        public bool canShoot = true;
+        public float _arrowCooldown = 1.0f;
 
+        //Aim Camera switch
+        public CinemachineVirtualCamera aimCamera;
+        public CinemachineVirtualCamera followCamera;
+        public UIController uiController;
+        private InventoryManager inventoryManager;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -140,6 +150,8 @@ namespace StarterAssets
 
         private void Start()
         {
+            inventoryManager = InventoryManager.instance;
+
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
             _hasAnimator = TryGetComponent(out _animator);
@@ -168,6 +180,9 @@ namespace StarterAssets
             AimShoot();
         }
 
+        
+
+
 
         private void AimShoot()
         {
@@ -176,6 +191,9 @@ namespace StarterAssets
                 //Play aiming animation
                 _animator.SetBool("Aiming", _input.isAiming);
                 _animator.SetBool("Shooting", _input.isShooting);
+                aimCamera.gameObject.SetActive(true);
+                followCamera.gameObject.SetActive(false);
+                uiController.SwitchUI(true);
 
             }
             else
@@ -183,14 +201,18 @@ namespace StarterAssets
                 //Stop the animation
                 _animator.SetBool("Aiming", false);
                 _animator.SetBool("Shooting", false);
+                aimCamera.gameObject.SetActive(false);
+                followCamera.gameObject.SetActive(true);
+                uiController.SwitchUI(false);
             }
         }
+
         public void Shoot()
         {
             GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
-            arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25, ForceMode.Impulse);
-            Debug.Log("Throw Arrow");
+            arrow.GetComponent<Rigidbody>().velocity = arrow.transform.forward * 30;
         }
+
 
         public void ActivateBow()
         {

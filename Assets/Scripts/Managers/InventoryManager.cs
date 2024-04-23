@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using StarterAssets;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager instance;
 
     public List<AllItems> inventoryItems = new List<AllItems>(); // Our items in the inventory
+
+    // Reference to the ThirdPersonController script
+    private ThirdPersonController thirdPersonController;
 
     //private int numberOfKeys = 0;
     [SerializeField] public TextMeshProUGUI keyText;
@@ -57,7 +61,11 @@ public class InventoryManager : MonoBehaviour
         return count;
     }
 
-
+    // Check if player has arrows in the inventory to shoot
+    public bool HasArrows()
+    {
+        return numberOfArrows > 0;
+    }
 
 
     public enum AllItems // All available items in the game
