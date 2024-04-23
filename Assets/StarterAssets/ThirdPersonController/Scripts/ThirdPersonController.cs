@@ -109,6 +109,10 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+
+        // Bow and Arrow
+        public bool hasBow = false;
+        [SerializeField] private Transform _bowParent;
         public GameObject arrowObject;
         public Transform arrowPoint;
 
@@ -164,6 +168,7 @@ namespace StarterAssets
             AimShoot();
         }
 
+
         private void AimShoot()
         {
             if (_input.isAiming && Grounded && !_input.sprint)
@@ -180,12 +185,17 @@ namespace StarterAssets
                 _animator.SetBool("Shooting", false);
             }
         }
-
         public void Shoot()
         {
             GameObject arrow = Instantiate(arrowObject, arrowPoint.position, transform.rotation);
             arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25, ForceMode.Impulse);
             Debug.Log("Throw Arrow");
+        }
+
+        public void ActivateBow()
+        {
+            hasBow = true;
+            _bowParent.gameObject.SetActive(true);
         }
 
 

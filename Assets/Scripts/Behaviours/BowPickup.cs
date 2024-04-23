@@ -1,3 +1,4 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class BowPickup : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().ActivateBow();
+            //other.GetComponent<ThirdPersonController>().ActivateBow();
             Destroy(gameObject);
         }
     }

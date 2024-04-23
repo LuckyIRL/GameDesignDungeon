@@ -6,7 +6,7 @@ public class ArrowBehaviour : MonoBehaviour
     {
         Destroy(gameObject, 10);
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         Destroy(transform.GetComponent<Rigidbody>());
