@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - CinemachineTarget
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

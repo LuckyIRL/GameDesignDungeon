@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using StarterAssets;
+//using StarterAssets;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     public List<AllItems> inventoryItems = new List<AllItems>(); // Our items in the inventory
 
     // Reference to the ThirdPersonController script
-    private ThirdPersonController thirdPersonController;
+    //private ThirdPersonController thirdPersonController;
 
     //private int numberOfKeys = 0;
     [SerializeField] public TextMeshProUGUI keyText;
