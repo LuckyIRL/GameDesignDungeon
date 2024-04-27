@@ -28,4 +28,13 @@ public class GameManager : MonoBehaviour
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    // Game over flag
+    public bool isGameOver = false;
+
 }
