@@ -17,6 +17,8 @@ public class Shooting : MonoBehaviour
     public Transform arrowSpawnPoint;
     private InputAction _shootAction;
     private InputAction _aimAction;
+    [SerializeField] private Canvas aimCanvas;
+    [SerializeField] private Canvas followCanvas;
 
     private void Start()
     {
@@ -26,6 +28,8 @@ public class Shooting : MonoBehaviour
         aimCamera = GameObject.Find("AimCamera").GetComponent<CinemachineVirtualCamera>();
         followCamera = GameObject.Find("FollowCamera").GetComponent<CinemachineVirtualCamera>();
         thirdPersonController = GetComponent<ThirdPersonController>();
+        aimCanvas = GameObject.Find("AimCanvas").GetComponent<Canvas>();
+        followCanvas = GameObject.Find("FollowCanvas").GetComponent<Canvas>();
     }
 
     // Switch between the follow camera and the aim camera
@@ -36,6 +40,8 @@ public class Shooting : MonoBehaviour
             aimCamera.Priority = 20;
             followCamera.Priority = 10;
             _input.isAiming = true;
+            aimCanvas.enabled = true;
+            followCanvas.enabled = false;
             Debug.Log("Aiming");
         }
         else
@@ -43,6 +49,8 @@ public class Shooting : MonoBehaviour
             aimCamera.Priority = 10;
             followCamera.Priority = 20;
             _input.isAiming = false;
+            aimCanvas.enabled = false;
+            followCanvas.enabled = true;
         }
         if (_input.isShooting)
         {
