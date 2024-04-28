@@ -20,6 +20,9 @@ public class Shooting : MonoBehaviour
     [SerializeField] private Canvas aimCanvas;
     [SerializeField] private Canvas followCanvas;
 
+    [SerializeField] private float normalSensitivity;
+    [SerializeField] private float aimSensitivity;
+
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -42,6 +45,7 @@ public class Shooting : MonoBehaviour
             _input.isAiming = true;
             aimCanvas.enabled = true;
             followCanvas.enabled = false;
+            thirdPersonController.SetSensitivity(aimSensitivity);
             Debug.Log("Aiming");
         }
         else
@@ -51,6 +55,7 @@ public class Shooting : MonoBehaviour
             _input.isAiming = false;
             aimCanvas.enabled = false;
             followCanvas.enabled = true;
+            thirdPersonController.SetSensitivity(normalSensitivity);
         }
         if (_input.isShooting)
         {

@@ -4427,6 +4427,7 @@ MonoBehaviour:
   SprintSpeed: 5.335
   RotationSmoothTime: 0.031
   SpeedChangeRate: 10
+  Sensitivity: 1
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
   FootstepAudioClips:
   - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
@@ -7359,6 +7360,8 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 2145266101}
   aimCanvas: {fileID: 7689843150613876062}
   followCanvas: {fileID: 715575920878419049}
+  normalSensitivity: 1
+  aimSensitivity: 0.5
 --- !u!4 &7082370648397365629
 Transform:
   m_ObjectHideFlags: 0
