@@ -15,11 +15,13 @@ public class Shooting : MonoBehaviour
     public ThirdPersonController thirdPersonController;
     public GameObject arrowPrefab;
     public Transform arrowSpawnPoint;
+    private InputAction _shootAction;
+    private InputAction _aimAction;
 
-    private void Awake()
+    private void Start()
     {
         _animator = GetComponent<Animator>();
-        _input = new StarterAssetsInputs(); // Initialize the input actions
+        _input = GetComponent<StarterAssetsInputs>(); // Initialize the input actions
         _gameManager = FindObjectOfType<GameManager>();
         aimCamera = GameObject.Find("AimCamera").GetComponent<CinemachineVirtualCamera>();
         followCamera = GameObject.Find("FollowCamera").GetComponent<CinemachineVirtualCamera>();
@@ -58,6 +60,9 @@ public class Shooting : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
+            GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
+            arrow.GetComponent<Rigidbody>().AddForce(arrowSpawnPoint.forward * 1000);
+            
             Debug.Log("Hit: " + hit.transform.name);
         }
     }

@@ -14,6 +14,7 @@ namespace StarterAssets
 		public bool sprint;
 		public bool isAiming;
 		public bool isShooting;
+		public GameObject Player;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
