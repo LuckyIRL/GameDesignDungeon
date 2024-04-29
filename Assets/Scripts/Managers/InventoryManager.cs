@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI keyText;
     [SerializeField] public TextMeshProUGUI arrowText;
     public int numberOfArrows = 0;
+    // check if the player has a bow
+    public bool hasBow = false;
 
     private void Awake()
     {
@@ -53,7 +55,7 @@ public class InventoryManager : MonoBehaviour
         int count = 0;
         foreach (var item in inventoryItems)
         {
-            if (item == AllItems.KeyRed || item == AllItems.KeyYellow || item == AllItems.KeyGreen)
+            if (item == AllItems.KeyRed || item == AllItems.KeyYellow || item == AllItems.KeyGreen || item == AllItems.KeyBlue)
             {
                 count++;
             }
@@ -67,6 +69,11 @@ public class InventoryManager : MonoBehaviour
         return numberOfArrows > 0;
     }
 
+    // Check if player has a bow in the inventory to shoot
+    public bool HasBow()
+    {
+        return hasBow;
+    }
 
     public enum AllItems // All available items in the game
     {
@@ -75,5 +82,6 @@ public class InventoryManager : MonoBehaviour
         KeyGreen,
         KeyBlue,
         Arrows,
+        Bow
     }
 }

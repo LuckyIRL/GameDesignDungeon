@@ -25,6 +25,7 @@ public class Shooting : MonoBehaviour
     public GameObject arrowPrefab;
     public Transform arrowSpawnPoint;
     public float shootDelay = 0.5f;
+    [SerializeField] private bool hasBow;
     [SerializeField] private bool hasArrows;
     [SerializeField] private bool canShoot = true;
 
@@ -48,11 +49,11 @@ public class Shooting : MonoBehaviour
         _animator = GetComponent<Animator>();
         _input = GetComponent<StarterAssetsInputs>(); // Initialize the input actions
         _inventory = FindObjectOfType<InventoryManager>();
-        aimCamera = GameObject.Find("AimCamera").GetComponent<CinemachineVirtualCamera>();
-        followCamera = GameObject.Find("FollowCamera").GetComponent<CinemachineVirtualCamera>();
+        aimCamera = GameObject.Find("PlayerAimCamera").GetComponent<CinemachineVirtualCamera>();
+        followCamera = GameObject.Find("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>();
         thirdPersonController = GetComponent<ThirdPersonController>();
         aimCanvas = GameObject.Find("AimCanvas").GetComponent<Canvas>();
-        followCanvas = GameObject.Find("FollowCanvas").GetComponent<Canvas>();
+        followCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
     }
 
     // Switch between the follow camera and the aim camera
@@ -68,11 +69,12 @@ public class Shooting : MonoBehaviour
             debugTransform.position = hit.point;
             mouseWorldPosition = hit.point;
             Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
-            Debug.Log("Hit: " + hit.transform.name);
+            //Debug.Log("Hit: " + hit.transform.name);
         }
 
-        // check if the player has arrows in the inventory
+        // check if the player has arrows and bow in the inventory
         hasArrows = _inventory.HasArrows();
+        hasBow = _inventory.HasBow();
 
         if (_input.isAiming)
         {
@@ -102,7 +104,7 @@ public class Shooting : MonoBehaviour
             thirdPersonController.SetSensitivity(normalSensitivity);
             thirdPersonController.SetRotateOnMove(true);
         }
-        if (_input.isShooting && hasArrows && canShoot)
+        if (_input.isShooting && hasArrows && canShoot && hasBow)
         {
             Vector3 aimDir = (mouseWorldPosition - arrowSpawnPoint.position).normalized;
 

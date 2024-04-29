@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class ArrowBehaviour : MonoBehaviour
+public class ArrowBehavior : MonoBehaviour
 {
     private Rigidbody _rigidbody;
     private float timeToDestroy = 5f;
     private RaycastHit hit;
 
-    [SerializeField] public Transform vfxHitGreen;
-    [SerializeField] public Transform vfxHitRed;
+    [SerializeField] private int arrowDamage = 20; // Damage inflicted by the arrow
 
-
+    [SerializeField] private Transform vfxHitGreen;
+    [SerializeField] private Transform vfxHitRed;
 
     private void Awake()
     {
@@ -27,25 +27,22 @@ public class ArrowBehaviour : MonoBehaviour
         _rigidbody.velocity = transform.forward * speed;
     }
 
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<AimTarget>() != null)
+        BossBehavior boss = other.GetComponent<BossBehavior>();
+
+        if (boss != null)
         {
-            // Hit target instansiate green vfx
+            // Hit the boss, apply damage
+            boss.TakeDamage(arrowDamage);
             Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
-            
         }
         else
         {
-            // Hit something else instansiate red vfx
             Instantiate(vfxHitRed, transform.position, Quaternion.identity);
         }
-        // wait for timeToDestroy before destroying the arrow
+
+        // Destroy the arrow
         Destroy(gameObject, timeToDestroy);
-        
-
     }
-
-
-
 }
