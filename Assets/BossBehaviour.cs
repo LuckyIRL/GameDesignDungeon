@@ -2,32 +2,31 @@ using UnityEngine;
 
 public class BossBehavior : MonoBehaviour
 {
-    public int maxHealth = 100;
-    private int currentHealth;
-    private Animator animator;
+    public UnitHealth health;
+    public Animator animator;
+    public Transform player;
 
-    private void Start()
+    public void Start()
     {
-        currentHealth = maxHealth;
+        health = new UnitHealth(100, 100);
+        animator = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
     }
 
-    // Method to handle taking damage from arrows
-    public void TakeDamage(int damage)
+    // set the triggers to play the Die animation and the Damage animation
+    public void TakeDamage(int arrowDamage)
     {
-        currentHealth -= damage;
-
-        Debug.Log("Boss Health: " + currentHealth); // Debug log to track health reduction
-
-        if (currentHealth <= 0)
+        if (health.Health > 0)
         {
-            Die();
+            health.Health -= 10;
+            animator.SetTrigger("Damage");
+            Debug.Log("Boss Health: " + health.Health);
         }
-    }
-
-    private void Die()
-    {
-        animator.SetTrigger("Die"); // Trigger the death animation
-        // Implement death behavior (e.g., play death animation, trigger victory event, etc.)
-        Destroy(gameObject);
+        else
+        {
+            animator.SetTrigger("Die");
+            Debug.Log("Boss is dead");
+        }
     }
 }

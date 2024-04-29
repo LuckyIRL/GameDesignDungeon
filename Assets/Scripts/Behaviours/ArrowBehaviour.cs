@@ -31,18 +31,19 @@ public class ArrowBehavior : MonoBehaviour
     {
         BossBehavior boss = other.GetComponent<BossBehavior>();
 
-        if (boss != null)
+        if (boss != null) 
         {
-            // Hit the boss, apply damage
-            boss.TakeDamage(arrowDamage);
-            Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
+            // Destroy the arrow
+            Destroy(transform.GetComponent<Rigidbody>());
+            if (other.tag == "Boss")
+            {
+                other.GetComponent<BossBehavior>().TakeDamage(arrowDamage);
+                Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(vfxHitRed, transform.position, Quaternion.identity);
+            }
         }
-        else
-        {
-            Instantiate(vfxHitRed, transform.position, Quaternion.identity);
-        }
-
-        // Destroy the arrow
-        Destroy(gameObject, timeToDestroy);
     }
 }
