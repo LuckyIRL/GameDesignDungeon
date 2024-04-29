@@ -1,51 +1,72 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using StarterAssets;
 
 public class UIController : MonoBehaviour
 {
     [SerializeField] private Canvas mainScreenUI;
-    [SerializeField] private Canvas aimingUI;
+    [SerializeField] private Canvas PauseUI;
+    private StarterAssetsInputs inputs;
 
-    [SerializeField] private Slider mainHealthSlider;
-    [SerializeField] private Slider aimingHealthSlider;
-
-    [SerializeField] private Slider mainDrawSlider;
-    [SerializeField] private Slider aimingDrawSlider;
-
-    [SerializeField] private TextMeshProUGUI mainKeyText;
-    [SerializeField] private TextMeshProUGUI aimingKeyText;
-
-    [SerializeField] private TextMeshProUGUI mainArrowText;
-    [SerializeField] private TextMeshProUGUI aimingArrowText;
+    public Slider musicSlider, sfxSlider;
 
     private InventoryManager inventoryManager;
 
     private void Start()
     {
         inventoryManager = InventoryManager.instance;
+        inputs = GetComponent<StarterAssetsInputs>();
     }
 
-    // Update UI elements with the given values
-    public void UpdateUI(float healthSliderValue, float drawSliderValue, string keyText, string arrowText)
+    // Pause the game
+    public void PauseGame()
     {
-        mainHealthSlider.value = healthSliderValue;
-        aimingHealthSlider.value = healthSliderValue;
-
-        mainDrawSlider.value = drawSliderValue;
-        aimingDrawSlider.value = drawSliderValue;
-
-        mainKeyText.text = keyText;
-        aimingKeyText.text = keyText;
-
-        mainArrowText.text = arrowText;
-        aimingArrowText.text = arrowText;
+        if (inputs.isPaused)
+        {
+            Time.timeScale = 1;
+            SwitchUI();
+        }
+        else
+        {
+            Time.timeScale = 0;
+            SwitchUI();
+        }
     }
 
-    // Switch between main screen UI and aiming UI
-    public void SwitchUI(bool isAiming)
+    // Switch between the main screen UI and the pause UI
+    private void SwitchUI()
     {
-        mainScreenUI.enabled = !isAiming;
-        aimingUI.enabled = isAiming;
+        mainScreenUI.gameObject.SetActive(!mainScreenUI.gameObject.activeSelf);
+        PauseUI.gameObject.SetActive(!PauseUI.gameObject.activeSelf);
+        inputs.isPaused = !inputs.isPaused;
+    }
+
+
+
+
+
+    // Update the music volume
+    public void ToggleMusic()
+    {
+        AudioManager.instance.ToggleMusic();
+    }
+
+    // Update the SFX volume
+    public void ToggleSFX()
+    {
+        AudioManager.instance.ToggleSFX();
+    }
+
+    // Update the music volume
+    public void SetMusicVolume()
+    {
+        AudioManager.instance.SetMusicVolume(musicSlider.value);
+    }
+
+    // Update the SFX volume
+    public void SetSFXVolume()
+    {
+        AudioManager.instance.SetSFXVolume(sfxSlider.value);
     }
 }

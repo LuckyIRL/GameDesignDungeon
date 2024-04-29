@@ -316,6 +316,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5542ca09cf522c2489ea98aa9f92c700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowDamage: 20
+  arrowDamage: 50
   vfxHitGreen: {fileID: 1038298844318899124, guid: d78898077ac7c3f49bbe54f58324dfc4, type: 3}
   vfxHitRed: {fileID: 6969052663340987823, guid: 9e040436fed309d4ea2caf110ae239c2, type: 3}

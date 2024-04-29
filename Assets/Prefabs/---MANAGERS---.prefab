@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5747133153285130310}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &237560397416140858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6464735259749417592}
+  m_Layer: 0
+  m_Name: Music Source
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6464735259749417592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237560397416140858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5097820324971954048}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2758890126868995582
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,8 +95,65 @@ Transform:
   - {fileID: 4369130553068091075}
   - {fileID: 1484329238342400571}
   - {fileID: 1766860444337561251}
+  - {fileID: 5097820324971954048}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3726901652139447847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5097820324971954048}
+  - component: {fileID: 692868196852434766}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5097820324971954048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3726901652139447847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6464735259749417592}
+  - {fileID: 1407515038858965555}
+  m_Father: {fileID: 5747133153285130310}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &692868196852434766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3726901652139447847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 024e680039972544d946be7b5f115f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicSounds:
+  - name: Music
+    clip: {fileID: 8300000, guid: 509f7900521916f46bb365d84a84c534, type: 3}
+  SFXSounds:
+  - name: Hit
+    clip: {fileID: 8300000, guid: 3c817a5de34276946b22ebfe40b5aae0, type: 3}
+  - name: Die
+    clip: {fileID: 8300000, guid: b8b8e967d3ccb3c4a87e55393b3c5c37, type: 3}
+  MusicSource: {fileID: 0}
+  SFXSource: {fileID: 0}
 --- !u!1 &4722220295273781349
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,6 +198,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c438caeb9168e4ba63d3dc2c13a0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameOver: 0
+--- !u!1 &5190011022501472252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1407515038858965555}
+  m_Layer: 0
+  m_Name: SFX Source
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1407515038858965555
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5190011022501472252}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5097820324971954048}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6058030156159312133
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +278,7 @@ MonoBehaviour:
   keyText: {fileID: 0}
   arrowText: {fileID: 0}
   numberOfArrows: 0
+  hasBow: 0
 --- !u!1 &6940474102016978251
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,12 +324,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainScreenUI: {fileID: 0}
-  aimingUI: {fileID: 0}
-  mainHealthSlider: {fileID: 0}
-  aimingHealthSlider: {fileID: 0}
-  mainDrawSlider: {fileID: 0}
-  aimingDrawSlider: {fileID: 0}
-  mainKeyText: {fileID: 0}
-  aimingKeyText: {fileID: 0}
-  mainArrowText: {fileID: 0}
-  aimingArrowText: {fileID: 0}
+  PauseUI: {fileID: 0}
+  musicSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}

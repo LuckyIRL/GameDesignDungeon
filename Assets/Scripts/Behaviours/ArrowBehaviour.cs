@@ -6,7 +6,7 @@ public class ArrowBehavior : MonoBehaviour
     private float timeToDestroy = 5f;
     private RaycastHit hit;
 
-    [SerializeField] private int arrowDamage = 20; // Damage inflicted by the arrow
+    [SerializeField] private int arrowDamage; // Damage inflicted by the arrow
 
     [SerializeField] private Transform vfxHitGreen;
     [SerializeField] private Transform vfxHitRed;
@@ -37,6 +37,7 @@ public class ArrowBehavior : MonoBehaviour
             Destroy(transform.GetComponent<Rigidbody>());
             if (other.tag == "Boss")
             {
+                transform.parent = other.transform;
                 other.GetComponent<BossBehavior>().TakeDamage(arrowDamage);
                 Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
             }

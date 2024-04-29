@@ -23,6 +23,9 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		[Header("UI Settings")]
+		public bool isPaused;
+
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
@@ -56,6 +59,12 @@ namespace StarterAssets
 		{
             isShooting = value.isPressed;
         }
+
+		public void OnPause(InputValue value)
+		{
+            isPaused = value.isPressed;
+        }
+
 #endif
 
 
