@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 7601720015008004216}
   m_Layer: 0
   m_Name: ArrowPickup
-  m_TagString: Untagged
+  m_TagString: Arrow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,8 +205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a2f3c0b353262438bf31114ec92a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 3
-  arrow: {fileID: 1199651161327313730, guid: 1645c6a2b8dd1db449b4ca6b4e307d17, type: 3}
+  itemType: 4
+  arrow: {fileID: 4067729600672177484, guid: 6c64cb3af748e6f4c84bc932efa69ae1, type: 3}
   arrowAmount: 5
 --- !u!1 &3995517292862654261
 GameObject:

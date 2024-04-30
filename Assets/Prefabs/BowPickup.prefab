@@ -100,6 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3f9ca1f87378746bc25073fd49606c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemType: 5
+  bowPrefab: {fileID: 1418600434947987846}
+  pickupSound: {fileID: 8300000, guid: a3807e49f9070f944941e7e34b9417f6, type: 3}
+  pickupEffect: {fileID: 4238148363177201619, guid: 9e040436fed309d4ea2caf110ae239c2, type: 3}
+  playerController: {fileID: 0}
 --- !u!1 &5666738431682447543
 GameObject:
   m_ObjectHideFlags: 0

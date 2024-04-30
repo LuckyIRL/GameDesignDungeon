@@ -38,6 +38,8 @@ namespace StarterAssets
         [Space(10)]
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
+        public bool canDoubleJump = false;
+        private int jumpCount = 0;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -89,6 +91,12 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+
+        // UI icons
+        public GameObject bowIcon;
+        public GameObject DoubleJumpIcon;
+
+        private Transform currentElevator;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -195,6 +203,7 @@ namespace StarterAssets
             }
         }
 
+
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
@@ -295,6 +304,9 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
+                // Reset jump count when grounded
+                jumpCount = 0;
+
                 // update animator if using character
                 if (_hasAnimator)
                 {
@@ -311,13 +323,20 @@ namespace StarterAssets
                 // Jump
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    // Increment jump count
+                    jumpCount++;
 
-                    // update animator if using character
-                    if (_hasAnimator)
+                    // Perform double jump if applicable
+                    if (jumpCount <= 2 || (canDoubleJump && jumpCount <= 1))
                     {
-                        _animator.SetBool(_animIDJump, true);
+                        // the square root of H * -2 * G = how much velocity needed to reach desired height
+                        _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
+                        // update animator if using character
+                        if (_hasAnimator)
+                        {
+                            _animator.SetBool(_animIDJump, true);
+                        }
                     }
                 }
 
@@ -356,6 +375,42 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+
+
+        public void ActivateDoubleJumpPowerUp()
+        {
+            canDoubleJump = true;
+        }
+
+        public void SetBowIconActive(bool active)
+        {
+            bowIcon.SetActive(active);
+        }
+
+        public void SetDoubleJumpIconActive(bool active)
+        {
+            DoubleJumpIcon.SetActive(active);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Elevator"))
+            {
+                currentElevator = other.transform.parent; // Assuming elevator platform is parented to the trigger object
+                transform.parent = currentElevator; // Parent the player to the elevator platform
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Elevator"))
+            {
+                transform.parent = null; // Unparent the player from the elevator platform
+                currentElevator = null; // Clear reference to the current elevator
+            }
+        }
+
+
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {

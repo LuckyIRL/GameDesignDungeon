@@ -2,18 +2,30 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    public int health = 100;
+
+    private void OnTriggerEnter(Collider other)
     {
-        // Check if the colliding object is the player
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Arrow"))
         {
-            // Check if the player is jumping (you may need to adjust the condition based on your player's jumping mechanics)
-            Rigidbody playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
-            if (playerRigidbody.velocity.y > 0.0f)
-            {
-                // Destroy the enemy
-                Destroy(gameObject);
-            }
+            // Reduce enemy health when hit by an arrow
+            TakeDamage(20); // Adjust the amount of damage as needed
         }
+    }
+
+    private void TakeDamage(int damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        // Perform death actions (e.g., play death animation, spawn particle effects, etc.)
+        Destroy(gameObject);
     }
 }

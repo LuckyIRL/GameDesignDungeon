@@ -15,6 +15,7 @@ namespace StarterAssets
 		public bool isAiming;
 		public bool isShooting;
 		public GameObject Player;
+		public bool isPushing;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -65,6 +66,11 @@ namespace StarterAssets
             isPaused = value.isPressed;
         }
 
+		public void OnPush(InputValue value)
+		{
+            isPushing = value.isPressed;
+        }
+
 #endif
 
 
@@ -87,6 +93,11 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
+
+		public void PushInput(bool newPushState)
+		{
+            isPushing = newPushState;
+        }
 
 		private void OnApplicationFocus(bool hasFocus)
 		{
