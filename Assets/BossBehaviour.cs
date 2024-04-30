@@ -32,6 +32,8 @@ public class BossBehavior : MonoBehaviour
     public float projectileLifetime = 2f;
     private float timeSinceLastAttack = 0f;
     public float attackCooldown = 2f;
+    // melee attack
+    public Collider meleeCollider;
 
 
 
@@ -117,6 +119,7 @@ public class BossBehavior : MonoBehaviour
         arrow = GetComponent<ArrowBehavior>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerBehaviour = player.GetComponent<PlayerBehaviour>();
+        meleeCollider = GetComponent<Collider>();
 
 
     }
@@ -128,11 +131,11 @@ public class BossBehavior : MonoBehaviour
 
         // Check which attack to use based on the distance between the player and the boss
 
-        if (distance <= 2.0f)
+        if (distance <= 5.0f)
         {
             MeleeAttack();
         }
-        else if (distance <= 10.0f)
+        else if (distance <= 15.0f)
         {
             RangedAttack();
         }
@@ -146,8 +149,10 @@ public class BossBehavior : MonoBehaviour
     {
         // Trigger melee attack animation
         animator.SetTrigger("MeleeAttack");
-        // Damage the player
-        playerBehaviour.TakeDamage(meleeDamage);
+        // Damage the player if the box collider trigger hits the player
+        meleeCollider.enabled = true;
+
+
     }
 
     private void RangedAttack()
