@@ -29,6 +29,24 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void RespawnPlayerAtLastCheckpoint()
+    {
+        // Get the respawn position from the last checkpoint
+        Vector3 respawnPosition = Checkpoint.GetRespawnPosition();
+
+        // Move player to respawn position
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            player.transform.position = respawnPosition;
+        }
+        else
+        {
+            Debug.LogWarning("Player not found for respawn.");
+        }
+    }
+
+
     public void QuitGame()
     {
         Application.Quit();

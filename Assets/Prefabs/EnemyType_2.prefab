@@ -881,7 +881,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1409007160631009897}
   m_Father: {fileID: 2037613458406275972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6416444047738882310
@@ -1004,14 +1005,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8409536361085563683}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5915720572190264337}
   - {fileID: 6534348331643709497}
-  m_Father: {fileID: 2037613458406275972}
+  m_Father: {fileID: 554707909054505716}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5649704103612846198
 Animator:
@@ -1074,10 +1075,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2037613458406275972}
-  - component: {fileID: 5149457628449493822}
-  - component: {fileID: 4413040037249419504}
   - component: {fileID: 2644434971432353171}
   - component: {fileID: 3498572215399051661}
+  - component: {fileID: 6470461897754536026}
+  - component: {fileID: 554396947420197300}
   m_Layer: 0
   m_Name: EnemyType_2
   m_TagString: Untagged
@@ -1098,45 +1099,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1409007160631009897}
   - {fileID: 554707909054505716}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5149457628449493822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8806378141845753721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd84f1d1e8fc1645b863036cb93372c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
---- !u!195 &4413040037249419504
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8806378141845753721}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.67
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1.11
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!135 &2644434971432353171
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1167,8 +1132,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8806378141845753721}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 38db71b772e940b791a0d173406cbb04, type: 3}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 1f583387dcc14604b6836cea4b8d68d0, type: 3}
+  m_Controller: {fileID: 9100000, guid: f7bf964cc4d55b1489547b3310969219, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1179,6 +1144,38 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6470461897754536026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8806378141845753721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 246937adaf677ac4d866cf44f27f6912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Behaviour: {fileID: 0}
+  moveSpeed: 3
+  detectionRange: 10
+  attackSphere: 2
+  attackDamage: 10
+  playerRange: 1
+  animator: {fileID: 9500000, guid: 250bec55ac60b6841b0eb67287c807b4, type: 3}
+--- !u!114 &554396947420197300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8806378141845753721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c784331c6562384694ebbe1a861bf82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
 --- !u!1 &9027536467008376796
 GameObject:
   m_ObjectHideFlags: 0

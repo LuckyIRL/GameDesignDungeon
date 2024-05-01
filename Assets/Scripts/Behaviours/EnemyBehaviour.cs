@@ -1,52 +1,143 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    private UnitHealth health;
-    // Variables for Enemy
-    public float speed = 5.0f;
-    public float attackSpeed = 1.0f;
-    public float attackRange = 1.0f;
-    public float attackCooldown = 0.0f;
-    public int damage = 1;
+    public Transform[] patrolPoints;
+    public float moveSpeed = 3f;
+    public float detectionRange = 10f;
+    public float playerRange = 1f;
+    public int attackDamage = 10;
+    public float attackRange = 3f;
+    public float damageInterval = 1f; // Interval between damage ticks
+    public int damagePerTick = 5; // Damage per tick
 
-    // Setting the health of the enemy
-    public void SetHealth(int health, int maxHealth)
+    private Transform player;
+    private int currentPatrolIndex = 0;
+    private bool isChasing = false;
+    private bool isAttacking = false;
+
+    void Start()
     {
-        this.health = new UnitHealth(health, maxHealth);
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    // Method to follow the player
-    public void FollowPlayer(Transform player)
+    void Update()
     {
-        transform.LookAt(player);
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
-
-    // Method to attack the player
-    public void AttackPlayer(Transform player)
-    {
-        if (Vector3.Distance(transform.position, player.position) <= attackRange)
+        if (isChasing)
         {
-            if (Time.time > attackCooldown)
+            // Chase the player
+            ChasePlayer();
+        }
+        else
+        {
+            // Patrol between patrol points
+            Patrol();
+        }
+    }
+
+    void Patrol()
+    {
+        // Move towards the current patrol point
+        Transform target = patrolPoints[currentPatrolIndex];
+        transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+
+        // Check if reached the current patrol point
+        if (Vector3.Distance(transform.position, target.position) < 0.1f)
+        {
+            // Move to the next patrol point
+            currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+        }
+    }
+
+    void ChasePlayer()
+    {
+        // Check if the player is within detection range
+        if (Vector3.Distance(transform.position, player.position) <= detectionRange)
+        {
+            // Move towards the player
+            transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+
+            // Rotate to face the player
+            transform.LookAt(player);
+
+            // Check if the player is within attack range
+            if (Vector3.Distance(transform.position, player.position) <= playerRange)
             {
-                attackCooldown = Time.time + attackSpeed;
-                PlayerBehaviour playerBehaviour = player.GetComponent<PlayerBehaviour>();
-                playerBehaviour.TakeDamage(damage);
+                // Attack the player
+                Attack();
             }
         }
-    }
-
-    // Method to take damage when hit by the player
-    public void TakeDamage(int dmg)
-    {
-        health.DmgUnit(dmg);
-        if (health.Health <= 0)
+        else
         {
-            Destroy(gameObject);
+            // If the player is not within detection range, stop chasing
+            isChasing = false;
         }
     }
 
+
+    void Attack()
+    {
+        // Check if the player is within player range
+        if (Vector3.Distance(transform.position, player.position) <= playerRange)
+        {
+            if (!isAttacking)
+            {
+                // Start applying damage over time
+                StartCoroutine(DealDamageOverTime());
+            }
+        }
+        else
+        {
+            // Stop applying damage over time if player is not within player range
+            StopCoroutine(DealDamageOverTime());
+            isAttacking = false;
+        }
+    }
+
+    IEnumerator DealDamageOverTime()
+    {
+        isAttacking = true;
+        while (Vector3.Distance(transform.position, player.position) <= playerRange)
+        {
+            // Deal damage to the player every tick
+            player.GetComponent<PlayerBehaviour>().TakeDamage(damagePerTick);
+
+            // Wait for the next damage tick
+            yield return new WaitForSeconds(damageInterval);
+        }
+        isAttacking = false;
+    }
+
+    // Add logic to switch between patrolling and chasing modes based on player detection
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isChasing = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isChasing = false;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Draw the detection range
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        // Draw the attack sphere
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        // Draw the player range
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, playerRange);
+    }
 }

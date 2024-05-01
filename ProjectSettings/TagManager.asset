@@ -10,6 +10,7 @@ TagManager:
   - Boss
   - WayPoints
   - Elevator
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
