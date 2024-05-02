@@ -182,9 +182,9 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: -0.000000007450581, z: 0}
@@ -243,8 +243,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0678458, y: 0.059915468, z: 0.040823553}
-  m_Center: {x: 0.0019257844, y: -0.00046960518, z: 0.22605678}
+  m_Size: {x: 0.08117943, y: 0.06249571, z: 0.06442059}
+  m_Center: {x: -0.00028128552, y: 0.0008204282, z: 0.21425888}
 --- !u!54 &4591133991066665691
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5542ca09cf522c2489ea98aa9f92c700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowDamage: 50
+  arrowDamage: 10
   vfxHitGreen: {fileID: 1038298844318899124, guid: d78898077ac7c3f49bbe54f58324dfc4, type: 3}
   vfxHitRed: {fileID: 6969052663340987823, guid: 9e040436fed309d4ea2caf110ae239c2, type: 3}
 --- !u!1 &5777506449832203653

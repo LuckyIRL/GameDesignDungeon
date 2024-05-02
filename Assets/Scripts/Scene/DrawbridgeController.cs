@@ -3,24 +3,15 @@ using UnityEngine;
 
 public class DrawbridgeController : MonoBehaviour
 {
-    // Mapping between trigger objects and their respective drawbridges
-    public Dictionary<Collider, Animator> triggerToDrawbridgeMap = new Dictionary<Collider, Animator>();
-
-    // Add a trigger and its corresponding drawbridge to the mapping
-    public void AddDrawbridge(Collider trigger, Animator drawbridgeAnimator)
-    {
-        triggerToDrawbridgeMap.Add(trigger, drawbridgeAnimator);
-    }
+    public Animator drawbridgeAnimator;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the collider belongs to the arrow and if it exists in the mapping
-        if (other.CompareTag("Arrow") && triggerToDrawbridgeMap.ContainsKey(other))
+        // Check if the collider belongs to the arrow
+        if (other.CompareTag("Arrow"))
         {
-            // Trigger the corresponding drawbridge lowering animation
-            Animator drawbridgeAnimator = triggerToDrawbridgeMap[other];
+            // Trigger the drawbridge lowering animation
             drawbridgeAnimator.SetTrigger("LowerDrawbridge");
         }
     }
 }
-
