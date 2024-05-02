@@ -30,21 +30,23 @@ public class ArrowBehavior : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         BossBehavior boss = other.GetComponent<BossBehavior>();
+        EnemyHealth enemy = other.GetComponent<EnemyHealth>();
 
-        if (boss != null) 
+        if (boss != null)
         {
-            // Destroy the arrow
-            Destroy(transform.GetComponent<Rigidbody>());
-            if (other.tag == "Boss")
-            {
-                transform.parent = other.transform;
-                other.GetComponent<BossBehavior>().TakeDamage(arrowDamage);
-                Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
-            }
-            else
-            {
-                Instantiate(vfxHitRed, transform.position, Quaternion.identity);
-            }
+            boss.TakeDamage(arrowDamage);
+            Destroy(gameObject);
+            Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
+        }
+        else if (enemy != null)
+        {
+            enemy.TakeDamage(arrowDamage);
+            Destroy(gameObject);
+            Instantiate(vfxHitGreen, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
