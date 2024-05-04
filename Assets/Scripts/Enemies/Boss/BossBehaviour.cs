@@ -43,6 +43,7 @@ public class BossBehavior : MonoBehaviour
             animator.SetTrigger("Die");
             AudioManager.instance.PlaySFX("Die");
             GetComponent<Collider>().enabled = false;
+            Die();
             Debug.Log("Boss is dead");
             
 
@@ -75,7 +76,8 @@ public class BossBehavior : MonoBehaviour
     // Method to be called when the boss dies
     public void Die()
     {
+        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1);
         // Load the next scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("EndScene");
     }
 }

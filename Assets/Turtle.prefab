@@ -1012,7 +1012,6 @@ GameObject:
   m_Component:
   - component: {fileID: 167036663214297645}
   - component: {fileID: 2138204222477190309}
-  - component: {fileID: 7553003495776048164}
   - component: {fileID: 1097251341584211558}
   - component: {fileID: 8720070183748542545}
   m_Layer: 0
@@ -1059,27 +1058,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 10.426789
   m_Center: {x: 0, y: 0.25456238, z: 0.05885601}
---- !u!95 &7553003495776048164
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6481078633032711405}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 1f583387dcc14604b6836cea4b8d68d0, type: 3}
-  m_Controller: {fileID: 9100000, guid: c1e9bc2aa3f9252449f8ed470aac2cfc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1097251341584211558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,6 +1095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   deathEffect: {fileID: 2905210207542071170, guid: ca09e01ecedd03c4d88dc7bd93c76ad6, type: 3}
+  deathEffectDuration: 1
 --- !u!1 &6691570804918552076
 GameObject:
   m_ObjectHideFlags: 0

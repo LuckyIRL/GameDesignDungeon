@@ -33,13 +33,13 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator Respawn(float delay)
     {
+        // Wait for the delay time
         yield return new WaitForSeconds(delay);
-        // Reset the player's health
-        _playerHealth.Health = _playerHealth.MaxHealth;
-        // Update the health bar
-        playerBehaviour._healthbar.SetHealth(_playerHealth.Health);
-        // Set the player's position to the starting position
+        // Respawn the player at the checkpoint position
         GameObject.FindGameObjectWithTag("Player").transform.position = checkpointPos;
+        // Reset the player's health
+        playerBehaviour.health.Health = playerBehaviour.health.MaxHealth;
+        playerBehaviour._healthbar.SetHealth(playerBehaviour.health.Health);
     }
 
     public void QuitGame()
@@ -54,6 +54,11 @@ public class GameManager : MonoBehaviour
         // Load the Game Over scene
         SceneManager.LoadScene("EndScene");
         
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +5,13 @@ public class Healthbar : MonoBehaviour
 {
     Slider _healthSlider;
 
-    void Start()
+    void Awake()
     {
         _healthSlider = GetComponent<Slider>();
+        if (_healthSlider == null)
+        {
+            Debug.LogError("Slider component not found!");
+        }
     }
 
     public void SetMaxHealth(int health)
@@ -22,5 +24,4 @@ public class Healthbar : MonoBehaviour
     {
         _healthSlider.value = health;
     }
-
 }

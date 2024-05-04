@@ -75,6 +75,13 @@ public class InventoryManager : MonoBehaviour
         return hasBow;
     }
 
+    // Update the number of arrows in the inventory
+    public void UpdateArrows(int arrows)
+    {
+        numberOfArrows = arrows;
+        UpdateUI();
+    }
+
     public enum AllItems // All available items in the game
     {
         KeyRed,

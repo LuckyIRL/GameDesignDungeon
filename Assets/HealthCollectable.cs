@@ -4,25 +4,30 @@ using UnityEngine;
 
 public class HealthCollectable : MonoBehaviour
 {
-    PlayerBehaviour player;
     public int healthAmount = 10;
     public GameObject collectEffect;
     public AudioClip collectSound;
+    PlayerBehaviour playerBehaviour;
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerBehaviour>();
+        playerBehaviour = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            collectEffect = Instantiate(collectEffect, transform.position, Quaternion.identity);
-            AudioSource.PlayClipAtPoint(collectSound, transform.position);
-
-            player.Heal(healthAmount);
+            // Play the collect effect
+            Instantiate(collectEffect, transform.position, Quaternion.identity);
+            // Play the collect sound
+            AudioClip clip = collectSound;
+            AudioSource.PlayClipAtPoint(clip, transform.position);
+            // Increase the player's health
+            playerBehaviour.HealPlayer(healthAmount);
+            // Destroy the collectable object
             Destroy(gameObject);
         }
     }
+
 }

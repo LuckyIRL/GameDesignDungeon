@@ -1,50 +1,73 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public Healthbar _healthbar; // Reference to the health bar script
+    public UnitHealth health;
     public int arrowsCollected = 0;
+    public int maxArrows = 100;
+    public Healthbar _healthbar; // Add the _healthbar field
+    public GameManager gameManager;
 
-    void Start()
-    {
-    }
 
-    // Method to take damage when hit by the boss
-    public void TakeDamage(int dmg)
+    private void Start()
     {
-        GameManager.gameManager._playerHealth.DmgUnit(dmg);
+        gameManager = FindObjectOfType<GameManager>();
+        health = new UnitHealth(100, 100);
+        // Assign the reference to the Healthbar component
+        _healthbar = FindObjectOfType<Healthbar>();
+        // Set the initial value of the health bar
         if (_healthbar != null)
         {
-            _healthbar.SetHealth(GameManager.gameManager._playerHealth.Health);
-        }
-        else
-        {
-            Debug.LogWarning("Health bar reference is not set in PlayerBehaviour.");
-        }
-
-        // Check if player's health reaches zero
-        if (GameManager.gameManager._playerHealth.Health <= 0)
-        {
-            GameManager.gameManager.StartCoroutine(GameManager.gameManager.Respawn(.5f));
+            _healthbar.SetMaxHealth(health.MaxHealth);
+            _healthbar.SetHealth(health.Health);
         }
     }
 
-    // Method to heal the player when collecting a health pickup
-    public void Heal(int healing)
+    private void LateUpdate()
     {
-        GameManager.gameManager._playerHealth.HealUnit(healing);
+        if (health.Health <= 0)
+        {
+            StartCoroutine(gameManager.Respawn(0.1f));
+        }
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        health.Health -= damageAmount;
         if (_healthbar != null)
         {
-            _healthbar.SetHealth(GameManager.gameManager._playerHealth.Health);
+            _healthbar.SetHealth(health.Health);
         }
-        else
+    }
+
+    public void HealPlayer(int healAmount)
+    {
+        health.Health += healAmount;
+        if (health.Health > health.MaxHealth)
         {
-            Debug.LogWarning("Health bar reference is not set in PlayerBehaviour.");
+            health.Health = health.MaxHealth;
+        }
+        if (_healthbar != null)
+        {
+            _healthbar.SetHealth(health.Health);
+        }
+    }
+
+    public void CollectArrows(int arrowAmount)
+    {
+        arrowsCollected += arrowAmount;
+        if (arrowsCollected > maxArrows)
+        {
+            arrowsCollected = maxArrows;
         }
     }
 
     public void UseArrow()
     {
-        arrowsCollected -= 1;
+        if (arrowsCollected > 0)
+        {
+            arrowsCollected--;
+        }
     }
 }
