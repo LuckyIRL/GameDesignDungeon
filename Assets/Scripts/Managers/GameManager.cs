@@ -63,6 +63,15 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    // Game over flag
-    public bool isGameOver = false;
+    public IEnumerator GameOver(float delay)
+    {
+        // Wait for the delay time
+        yield return new WaitForSeconds(delay);
+        // Load the Game Over scene
+        SceneManager.LoadScene("EndScene");
+        
+    }
+
+
+
 }

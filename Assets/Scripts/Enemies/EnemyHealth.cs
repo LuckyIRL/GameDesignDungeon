@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
+    public int maxHealth = 10;
     private int currentHealth;
-    public ParticleSystem deathEffect;
+    public GameObject deathEffect;
+    public float deathEffectDuration = 1f;
 
     private void Start()
     {
         currentHealth = maxHealth;
-        deathEffect = GetComponent<ParticleSystem>();
     }
 
     public void TakeDamage(int damageAmount)
@@ -23,9 +23,11 @@ public class EnemyHealth : MonoBehaviour
 
     private void Die()
     {
-        // Add any death behavior here, such as playing an animation or spawning effects
-        deathEffect.Play();
         Destroy(gameObject);
+        // Add any death behavior here, such as playing an animation or spawning effects
+        deathEffect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(deathEffect, deathEffectDuration);
+        
     }
 
     

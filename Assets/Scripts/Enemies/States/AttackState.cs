@@ -17,20 +17,8 @@ public class AttackState : StateMachineBehaviour
     {
         animator.transform.LookAt(player);
         float distance = Vector3.Distance(player.position, animator.transform.position);
-        // check which attack to use based on the distance between the player and the boss
-        if (distance <= 2.0f)
-        {
-            animator.SetTrigger("MeleeAttack");
-        }
-        else if (distance <= 10.0f)
-        {
-            animator.SetTrigger("RangedAttack");
-        }
-        else
-        {
-            animator.SetTrigger("JumpAttack");
-        }
-
+        if (distance > 3.5)
+            animator.SetBool("IsAttacking", false);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
