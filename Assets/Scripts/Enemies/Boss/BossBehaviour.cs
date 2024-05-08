@@ -12,7 +12,7 @@ public class BossBehavior : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public int damage = 10;
     public Collider armCollider;
-    public AttackState attackState;
+    private AttackState attackState;
     public GameManager gameManager;
 
 

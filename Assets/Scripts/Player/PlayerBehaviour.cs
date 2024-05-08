@@ -10,6 +10,7 @@ public class PlayerBehaviour : MonoBehaviour
     public GameManager gameManager;
 
 
+
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -68,6 +69,16 @@ public class PlayerBehaviour : MonoBehaviour
         if (arrowsCollected > 0)
         {
             arrowsCollected--;
+        }
+    }
+
+    public void Respawn(Vector3 respawnPoint)
+    {
+        transform.position = respawnPoint;
+        health.Health = health.MaxHealth;
+        if (_healthbar != null)
+        {
+            _healthbar.SetHealth(health.Health);
         }
     }
 }
